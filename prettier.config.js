@@ -8,5 +8,5 @@ export default {
   bracketSameLine: false,
   arrowParens: "always",
   endOfLine: "auto",
-  plugins: ["prettier-plugin-tailwindcss"]
+  plugins: ["prettier-plugin-tailwindcss"],
 };
