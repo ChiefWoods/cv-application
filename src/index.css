@@ -6,15 +6,8 @@
   * {
     @apply m-0 box-border p-0;
   }
-
-  html {
-    @apply text-[62.5%];
-  }
-
-  #root {
-    @apply inline-flex min-h-screen w-[100vw] flex-col;
-  }
 }
+
 @layer components {
   .footer-text {
     @apply whitespace-nowrap font-['Arial','Helvetica','sans-serif'] text-[1.2rem] text-white;
