@@ -12,4 +12,16 @@
   .footer-text {
     @apply whitespace-nowrap font-['Arial','Helvetica','sans-serif'] text-[1.2rem] text-white;
   }
+
+  .cv-text-normal {
+    @apply text-base;
+  }
+
+  .form-control {
+    @apply w-full rounded-md border-2 bg-gray-200 px-3 py-2 text-2xl;
+  }
+
+  .btn {
+    @apply flex h-min items-center gap-3 rounded-md px-4 py-3 transition-colors;
+  }
 }
