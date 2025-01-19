@@ -7,8 +7,19 @@ import {
   AccordionTrigger,
 } from "./components/ui/accordion";
 import { PersonalSection } from "./components/PersonalSection";
-import { Education, Personal } from "./types/resume";
+import {
+  Award,
+  Education,
+  Experience,
+  Organization,
+  Personal,
+  Skill,
+} from "./types/resume";
 import { EducationSection } from "./components/EducationSection";
+import { ExperienceSection } from "./components/ExperienceSection";
+import { OrganizationSection } from "./components/OrganizationSection";
+import { AwardSection } from "./components/AwardSection";
+import { SkillSection } from "./components/SkillSection";
 
 export default function App() {
   const [personal, setPersonal] = useState<Personal>({
@@ -18,6 +29,10 @@ export default function App() {
     address: "",
   });
   const [educations, setEducations] = useState<Education[]>([]);
+  const [experiences, setExperiences] = useState<Experience[]>([]);
+  const [organizations, setOrganizations] = useState<Organization[]>([]);
+  const [awards, setAwards] = useState<Award[]>([]);
+  const [skills, setSkills] = useState<Skill[]>([]);
 
   return (
     <>
@@ -35,6 +50,36 @@ export default function App() {
                   educations={educations}
                   setEducations={setEducations}
                 />
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="experience">
+              <AccordionTrigger className="p-4">Experience</AccordionTrigger>
+              <AccordionContent>
+                <ExperienceSection
+                  experiences={experiences}
+                  setExperiences={setExperiences}
+                />
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="organization">
+              <AccordionTrigger className="p-4">Organization</AccordionTrigger>
+              <AccordionContent>
+                <OrganizationSection
+                  organizations={organizations}
+                  setOrganizations={setOrganizations}
+                />
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="award">
+              <AccordionTrigger className="p-4">Award</AccordionTrigger>
+              <AccordionContent>
+                <AwardSection awards={awards} setAwards={setAwards} />
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="skill">
+              <AccordionTrigger className="p-4">Skill</AccordionTrigger>
+              <AccordionContent>
+                <SkillSection skills={skills} setSkills={setSkills} />
               </AccordionContent>
             </AccordionItem>
           </Accordion>
