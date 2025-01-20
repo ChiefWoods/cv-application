@@ -20,19 +20,20 @@ import { ExperienceSection } from "./components/ExperienceSection";
 import { OrganizationSection } from "./components/OrganizationSection";
 import { AwardSection } from "./components/AwardSection";
 import { SkillSection } from "./components/SkillSection";
+import { getResume } from "./lib/storage";
 
 export default function App() {
-  const [personal, setPersonal] = useState<Personal>({
-    name: "",
-    email: "",
-    phone: "",
-    address: "",
-  });
-  const [educations, setEducations] = useState<Education[]>([]);
-  const [experiences, setExperiences] = useState<Experience[]>([]);
-  const [organizations, setOrganizations] = useState<Organization[]>([]);
-  const [awards, setAwards] = useState<Award[]>([]);
-  const [skills, setSkills] = useState<Skill[]>([]);
+  const resume = getResume();
+  const [personal, setPersonal] = useState<Personal>(resume.personal);
+  const [educations, setEducations] = useState<Education[]>(resume.educations);
+  const [experiences, setExperiences] = useState<Experience[]>(
+    resume.experiences,
+  );
+  const [organizations, setOrganizations] = useState<Organization[]>(
+    resume.organizations,
+  );
+  const [awards, setAwards] = useState<Award[]>(resume.awards);
+  const [skills, setSkills] = useState<Skill[]>(resume.skills);
 
   return (
     <>
@@ -40,7 +41,7 @@ export default function App() {
         <section id="editor">
           <Accordion type="single" collapsible>
             <div className="flex items-center justify-between gap-x-3 p-4">
-              <h2>Personal</h2>
+              <p>Personal</p>
               <PersonalSection personal={personal} setPersonal={setPersonal} />
             </div>
             <AccordionItem value="education">

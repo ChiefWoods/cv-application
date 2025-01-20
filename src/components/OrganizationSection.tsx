@@ -33,6 +33,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "./ui/alert-dialog";
+import { setResume } from "@/lib/storage";
 
 function getEmptyForm(): Omit<Organization, "id"> {
   return {
@@ -75,18 +76,26 @@ export function OrganizationSection({
 
   function onSubmit(values: Organization) {
     if (selectedOrganization) {
-      setOrganizations((prev) =>
-        prev.map((p) => {
+      setOrganizations((prev) => {
+        const newOrganizations = prev.map((p) => {
           return p.id === selectedOrganization.id
             ? { ...values, id: selectedOrganization.id }
             : p;
-        }),
-      );
+        });
+
+        setResume("organizations", newOrganizations);
+        return newOrganizations;
+      });
     } else {
-      setOrganizations((prev) => [
-        ...prev,
-        { ...values, id: crypto.randomUUID() },
-      ]);
+      setOrganizations((prev) => {
+        const newOrganizations = [
+          ...prev,
+          { ...values, id: crypto.randomUUID() },
+        ];
+
+        setResume("organizations", newOrganizations);
+        return newOrganizations;
+      });
     }
 
     setIsDialogOpen(false);
@@ -95,7 +104,12 @@ export function OrganizationSection({
   }
 
   function onDelete(id: string) {
-    setOrganizations((prev) => prev.filter((p) => p.id !== id));
+    setOrganizations((prev) => {
+      const newOrganizations = prev.filter((p) => p.id !== id);
+
+      setResume("organizations", newOrganizations);
+      return newOrganizations;
+    });
     setIsAlertDialogOpen(false);
   }
 

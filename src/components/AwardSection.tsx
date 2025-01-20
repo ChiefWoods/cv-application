@@ -33,6 +33,7 @@ import {
   AlertDialogTitle,
 } from "./ui/alert-dialog";
 import { DatePicker } from "./ui/date-picker";
+import { setResume } from "@/lib/storage";
 
 function getEmptyForm(): Omit<Award, "id"> {
   return {
@@ -72,15 +73,23 @@ export function AwardSection({
 
   function onSubmit(values: Award) {
     if (selectedAward) {
-      setAwards((prev) =>
-        prev.map((p) => {
+      setAwards((prev) => {
+        const newAwards = prev.map((p) => {
           return p.id === selectedAward.id
             ? { ...values, id: selectedAward.id }
             : p;
-        }),
-      );
+        });
+
+        setResume("awards", newAwards);
+        return newAwards;
+      });
     } else {
-      setAwards((prev) => [...prev, { ...values, id: crypto.randomUUID() }]);
+      setAwards((prev) => {
+        const newAwards = [...prev, { ...values, id: crypto.randomUUID() }];
+
+        setResume("awards", newAwards);
+        return newAwards;
+      });
     }
 
     setIsDialogOpen(false);
@@ -89,7 +98,12 @@ export function AwardSection({
   }
 
   function onDelete(id: string) {
-    setAwards((prev) => prev.filter((p) => p.id !== id));
+    setAwards((prev) => {
+      const newAwards = prev.filter((p) => p.id !== id);
+
+      setResume("awards", newAwards);
+      return newAwards;
+    });
     setIsAlertDialogOpen(false);
   }
 

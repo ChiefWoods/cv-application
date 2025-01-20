@@ -24,6 +24,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Personal } from "@/types/resume";
+import { setResume } from "@/lib/storage";
 
 export function PersonalSection({
   personal,
@@ -51,6 +52,7 @@ export function PersonalSection({
 
   function onSubmit(values: Personal) {
     setPersonal(values);
+    setResume("personal", values);
     setIsOpen(false);
     form.reset();
   }

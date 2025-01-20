@@ -33,6 +33,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "./ui/alert-dialog";
+import { setResume } from "@/lib/storage";
 
 function getEmptyForm(): Omit<Experience, "id"> {
   return {
@@ -74,18 +75,26 @@ export function ExperienceSection({
 
   function onSubmit(values: Experience) {
     if (selectedExperience) {
-      setExperiences((prev) =>
-        prev.map((p) => {
+      setExperiences((prev) => {
+        const newExperiences = prev.map((p) => {
           return p.id === selectedExperience.id
             ? { ...values, id: selectedExperience.id }
             : p;
-        }),
-      );
+        });
+
+        setResume("experiences", newExperiences);
+        return newExperiences;
+      });
     } else {
-      setExperiences((prev) => [
-        ...prev,
-        { ...values, id: crypto.randomUUID() },
-      ]);
+      setExperiences((prev) => {
+        const newExperiences = [
+          ...prev,
+          { ...values, id: crypto.randomUUID() },
+        ];
+
+        setResume("experiences", newExperiences);
+        return newExperiences;
+      });
     }
 
     setIsDialogOpen(false);
@@ -94,7 +103,12 @@ export function ExperienceSection({
   }
 
   function onDelete(id: string) {
-    setExperiences((prev) => prev.filter((p) => p.id !== id));
+    setExperiences((prev) => {
+      const newExperiences = prev.filter((p) => p.id !== id);
+
+      setResume("experiences", newExperiences);
+      return newExperiences;
+    });
     setIsAlertDialogOpen(false);
   }
 

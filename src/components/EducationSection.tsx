@@ -33,6 +33,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "./ui/alert-dialog";
+import { setResume } from "@/lib/storage";
 
 function getEmptyForm(): Omit<Education, "id"> {
   return {
@@ -75,18 +76,23 @@ export function EducationSection({
 
   function onSubmit(values: Education) {
     if (selectedEducation) {
-      setEducations((prev) =>
-        prev.map((p) => {
+      setEducations((prev) => {
+        const newEducations = prev.map((p) => {
           return p.id === selectedEducation.id
             ? { ...values, id: selectedEducation.id }
             : p;
-        }),
-      );
+        });
+
+        setResume("educations", newEducations);
+        return newEducations;
+      });
     } else {
-      setEducations((prev) => [
-        ...prev,
-        { ...values, id: crypto.randomUUID() },
-      ]);
+      setEducations((prev) => {
+        const newEducations = [...prev, { ...values, id: crypto.randomUUID() }];
+
+        setResume("educations", newEducations);
+        return newEducations;
+      });
     }
 
     setIsDialogOpen(false);
@@ -95,7 +101,12 @@ export function EducationSection({
   }
 
   function onDelete(id: string) {
-    setEducations((prev) => prev.filter((p) => p.id !== id));
+    setEducations((prev) => {
+      const newEducations = prev.filter((edu) => edu.id !== id);
+
+      setResume("educations", newEducations);
+      return newEducations;
+    });
     setIsAlertDialogOpen(false);
   }
 

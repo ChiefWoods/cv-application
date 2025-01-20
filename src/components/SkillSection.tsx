@@ -31,6 +31,7 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 import { Plus, Trash2 } from "lucide-react";
+import { setResume } from "@/lib/storage";
 
 function getEmptyForm(): Omit<Skill, "id"> {
   return {
@@ -60,14 +61,24 @@ export function SkillSection({
   }
 
   function onSubmit(values: Skill) {
-    setSkills((prev) => [...prev, { ...values, id: crypto.randomUUID() }]);
+    setSkills((prev) => {
+      const newSkills = [...prev, { ...values, id: crypto.randomUUID() }];
+
+      setResume("skills", newSkills);
+      return newSkills;
+    });
     setIsDialogOpen(false);
     form.reset();
     setSelectedSkill(null);
   }
 
   function onDelete(id: string) {
-    setSkills((prev) => prev.filter((p) => p.id !== id));
+    setSkills((prev) => {
+      const newSkills = prev.filter((p) => p.id !== id);
+
+      setResume("skills", newSkills);
+      return newSkills;
+    });
     setIsAlertDialogOpen(false);
   }
 
