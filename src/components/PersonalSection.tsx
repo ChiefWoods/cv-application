@@ -44,6 +44,11 @@ export function PersonalSection({
     },
   });
 
+  function openEdit() {
+    form.reset(personal);
+    setIsOpen(true);
+  }
+
   function onSubmit(values: Personal) {
     setPersonal(values);
     setIsOpen(false);
@@ -53,7 +58,7 @@ export function PersonalSection({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon">
+        <Button variant="ghost" size="icon" onClick={openEdit}>
           <Pencil />
         </Button>
       </DialogTrigger>
