@@ -22,13 +22,13 @@ export function DurationFormField<T extends FieldValues>({
   const checkboxId = useId();
 
   return (
-    <div className="flex items-start gap-x-2">
+    <div className="flex gap-x-2">
       <FormField
         control={form.control}
         name={"startDate" as Path<T>}
         render={({ field }) => (
           <FormItem className="flex flex-1 flex-col gap-y-2">
-            <FormLabel>Start Date</FormLabel>
+            <FormLabel className="mt-1">Start Date</FormLabel>
             <FormControl>
               <DatePicker date={field.value} setDate={field.onChange} />
             </FormControl>
@@ -41,7 +41,7 @@ export function DurationFormField<T extends FieldValues>({
         name={"endDate" as Path<T>}
         render={({ field }) => (
           <FormItem className="flex flex-1 flex-col gap-y-2">
-            <FormLabel>End Date</FormLabel>
+            <FormLabel className="mt-1">End Date</FormLabel>
             <FormControl>
               <div className="flex flex-col gap-y-2">
                 <DatePicker

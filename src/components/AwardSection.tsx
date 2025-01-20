@@ -220,7 +220,7 @@ export function AwardSection({
                 name="date"
                 render={({ field }) => (
                   <FormItem className="flex flex-1 flex-col gap-y-2">
-                    <FormLabel>Date</FormLabel>
+                    <FormLabel className="mt-1">Date</FormLabel>
                     <FormControl>
                       <DatePicker date={field.value} setDate={field.onChange} />
                     </FormControl>

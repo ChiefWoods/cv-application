@@ -209,7 +209,7 @@ export function OrganizationSection({
                 control={form.control}
                 name="position"
                 render={({ field }) => (
-                  <FormItem className="flex-1">
+                  <FormItem>
                     <FormLabel>Position</FormLabel>
                     <FormControl>
                       <Input {...field} />
@@ -236,7 +236,7 @@ export function OrganizationSection({
                 control={form.control}
                 name="description"
                 render={({ field }) => (
-                  <FormItem className="flex-1">
+                  <FormItem>
                     <FormLabel>Description</FormLabel>
                     <FormControl>
                       <Textarea {...field} className="resize-none" />

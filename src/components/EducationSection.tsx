@@ -205,7 +205,7 @@ export function EducationSection({
                 control={form.control}
                 name="title"
                 render={({ field }) => (
-                  <FormItem className="flex-1">
+                  <FormItem>
                     <FormLabel>Title</FormLabel>
                     <FormControl>
                       <Input {...field} />
