@@ -21,6 +21,12 @@ import { OrganizationSection } from "./components/OrganizationSection";
 import { AwardSection } from "./components/AwardSection";
 import { SkillSection } from "./components/SkillSection";
 import { getResume } from "./lib/storage";
+import { Mail, MapPin, Phone } from "lucide-react";
+import { Separator } from "./components/ui/separator";
+import { DateP } from "./components/DateP";
+import { Entry } from "./components/Entry";
+import { GeneralDiv } from "./components/GeneralDiv";
+import { formatMonthYear } from "./lib/utils";
 
 export default function App() {
   const resume = getResume();
@@ -35,10 +41,25 @@ export default function App() {
   const [awards, setAwards] = useState<Award[]>(resume.awards);
   const [skills, setSkills] = useState<Skill[]>(resume.skills);
 
+  const headerInfo = [
+    {
+      icon: <MapPin className="header-info-icon" />,
+      text: personal.address,
+    },
+    {
+      icon: <Phone className="header-info-icon" />,
+      text: personal.phone,
+    },
+    {
+      icon: <Mail className="header-info-icon" />,
+      text: personal.email,
+    },
+  ];
+
   return (
     <>
-      <main>
-        <section id="editor" className="flex-1 rounded-lg border">
+      <main className="flex flex-col gap-x-4 p-4 md:flex-row">
+        <section id="editor" className="h-fit flex-1 rounded-lg border">
           <Accordion type="single" collapsible>
             <div className="flex items-center justify-between gap-x-3 border-b p-4">
               <p className="accordion-title">Personal</p>
@@ -95,7 +116,96 @@ export default function App() {
             </AccordionItem>
           </Accordion>
         </section>
-        <section id="preview"></section>
+        <section id="preview" className="h-fit flex-1 border px-4">
+          <div className="flex flex-col items-center gap-y-2 py-4">
+            <h2 className="text-2xl font-semibold">{personal.name}</h2>
+            <div className="flex gap-4">
+              {headerInfo.map(({ icon, text }) => {
+                return (
+                  <div className="flex items-center gap-2" key={text}>
+                    {icon}
+                    <p>{text}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <Separator />
+          <GeneralDiv title="Education">
+            {educations.map(
+              ({ id, school, title, startDate, endDate, description }) => {
+                return (
+                  <Entry
+                    key={id}
+                    header={school}
+                    subtitle={title}
+                    date={<DateP startDate={startDate} endDate={endDate} />}
+                    description={description}
+                  />
+                );
+              },
+            )}
+          </GeneralDiv>
+          <GeneralDiv title="Experience">
+            {experiences.map(
+              ({ id, title, company, startDate, endDate, description }) => {
+                return (
+                  <Entry
+                    key={id}
+                    header={title}
+                    subtitle={company}
+                    date={<DateP startDate={startDate} endDate={endDate} />}
+                    description={description}
+                  />
+                );
+              },
+            )}
+          </GeneralDiv>
+          <Separator />
+          <GeneralDiv title="Organizations">
+            {organizations.map(
+              ({ id, name, position, startDate, endDate, description }) => {
+                return (
+                  <Entry
+                    key={id}
+                    header={name}
+                    subtitle={position}
+                    date={<DateP startDate={startDate} endDate={endDate} />}
+                    description={description}
+                  />
+                );
+              },
+            )}
+          </GeneralDiv>
+          <Separator />
+          <GeneralDiv title="Awards">
+            {awards.map(({ id, name, organization, date, description }) => {
+              return (
+                <Entry
+                  key={id}
+                  header={name}
+                  subtitle={organization}
+                  date={
+                    <p className="font-semibold">{formatMonthYear(date)}</p>
+                  }
+                  description={description}
+                />
+              );
+            })}
+          </GeneralDiv>
+          <Separator />
+          <GeneralDiv title="Skills">
+            <ul className="max-[repeat(5,1fr)] grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2">
+              {skills.map(({ id, name }) => {
+                return (
+                  <li key={id} className="font-semibold">
+                    {name}
+                  </li>
+                );
+              })}
+            </ul>
+          </GeneralDiv>
+        </section>
       </main>
       <Footer />
     </>

@@ -82,4 +82,12 @@
   .accordion-title {
     @apply text-base;
   }
+
+  .header-info-icon {
+    @apply size-4 text-blue-500;
+  }
+
+  .general {
+    @apply grid grid-cols-[minmax(150px,auto)_1fr] py-4;
+  }
 }
