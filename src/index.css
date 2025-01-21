@@ -77,3 +77,9 @@
     }
   }
 }
+
+@layer utilities {
+  .accordion-title {
+    @apply text-base;
+  }
+}

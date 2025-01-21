@@ -108,7 +108,7 @@ export function AwardSection({
   }
 
   return (
-    <div className="flex flex-col gap-y-4 p-4">
+    <div className="flex flex-col gap-y-4 px-4">
       {awards.map((award) => {
         return (
           <div

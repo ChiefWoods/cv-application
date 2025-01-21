@@ -38,14 +38,16 @@ export default function App() {
   return (
     <>
       <main>
-        <section id="editor">
+        <section id="editor" className="flex-1 rounded-lg border">
           <Accordion type="single" collapsible>
-            <div className="flex items-center justify-between gap-x-3 p-4">
-              <p>Personal</p>
+            <div className="flex items-center justify-between gap-x-3 border-b p-4">
+              <p className="accordion-title">Personal</p>
               <PersonalSection personal={personal} setPersonal={setPersonal} />
             </div>
             <AccordionItem value="education">
-              <AccordionTrigger className="p-4">Education</AccordionTrigger>
+              <AccordionTrigger className="accordion-title p-4">
+                Education
+              </AccordionTrigger>
               <AccordionContent>
                 <EducationSection
                   educations={educations}
@@ -54,7 +56,9 @@ export default function App() {
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="experience">
-              <AccordionTrigger className="p-4">Experience</AccordionTrigger>
+              <AccordionTrigger className="accordion-title p-4">
+                Experience
+              </AccordionTrigger>
               <AccordionContent>
                 <ExperienceSection
                   experiences={experiences}
@@ -63,7 +67,9 @@ export default function App() {
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="organization">
-              <AccordionTrigger className="p-4">Organization</AccordionTrigger>
+              <AccordionTrigger className="accordion-title p-4">
+                Organization
+              </AccordionTrigger>
               <AccordionContent>
                 <OrganizationSection
                   organizations={organizations}
@@ -72,13 +78,17 @@ export default function App() {
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="award">
-              <AccordionTrigger className="p-4">Award</AccordionTrigger>
+              <AccordionTrigger className="accordion-title p-4">
+                Award
+              </AccordionTrigger>
               <AccordionContent>
                 <AwardSection awards={awards} setAwards={setAwards} />
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="skill">
-              <AccordionTrigger className="p-4">Skill</AccordionTrigger>
+              <AccordionTrigger className="accordion-title p-4">
+                Skill
+              </AccordionTrigger>
               <AccordionContent>
                 <SkillSection skills={skills} setSkills={setSkills} />
               </AccordionContent>
