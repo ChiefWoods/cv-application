@@ -115,7 +115,7 @@ export function SkillSection({
             </AlertDialogHeader>
             <AlertDialogFooter>
               <Button
-                variant="outline"
+                variant="secondary"
                 onClick={() => setIsAlertDialogOpen(false)}
               >
                 Cancel
