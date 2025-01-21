@@ -5,14 +5,6 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "./ui/button";
 import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "./ui/alert-dialog";
-import {
   Dialog,
   DialogClose,
   DialogContent,
@@ -30,8 +22,11 @@ import {
   FormMessage,
 } from "./ui/form";
 import { Input } from "./ui/input";
-import { Plus, Trash2 } from "lucide-react";
 import { setResume } from "@/lib/storage";
+import { CancelBtn } from "./CancelBtn";
+import { AccordionEntry } from "./AccordionEntry";
+import { DeleteAlert } from "./DeleteAlert";
+import { AddBtn } from "./AddBtn";
 
 function getEmptyForm(): Omit<Skill, "id"> {
   return {
@@ -86,63 +81,32 @@ export function SkillSection({
     <div className="flex flex-col gap-y-4 px-4">
       {skills.map((skill) => {
         return (
-          <div
+          <AccordionEntry
             key={skill.id}
-            className="flex items-center justify-between gap-x-4"
-          >
-            <h3>{skill.name}</h3>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => openDelete(skill)}
-            >
-              <Trash2 />
-            </Button>
-          </div>
+            name={skill.name}
+            openDelete={() => openDelete(skill)}
+          />
         );
       })}
       {selectedSkill && (
-        <AlertDialog
+        <DeleteAlert
           open={isAlertDialogOpen}
           onOpenChange={setIsAlertDialogOpen}
-        >
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Delete Skill</AlertDialogTitle>
-              <AlertDialogDescription>
-                Delete &apos;{selectedSkill.name}&apos; from Skill?
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <Button
-                variant="secondary"
-                onClick={() => setIsAlertDialogOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="destructive"
-                onClick={() => onDelete(selectedSkill.id)}
-              >
-                Confirm
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+          type="skill"
+          subject={selectedSkill.name}
+          onCancel={() => setIsAlertDialogOpen(false)}
+          onConfirm={() => onDelete(selectedSkill.id)}
+        />
       )}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
-          <Button
-            variant="outline"
-            size="sm"
+          <AddBtn
+            type="skill"
             onClick={() => {
               setSelectedSkill(null);
               form.reset(getEmptyForm());
             }}
-          >
-            <Plus />
-            Add Skill
-          </Button>
+          />
         </DialogTrigger>
         <DialogContent>
           <Form {...form}>
@@ -168,14 +132,7 @@ export function SkillSection({
               />
               <DialogFooter className="mt-2">
                 <DialogClose asChild>
-                  <Button
-                    variant="secondary"
-                    onClick={() => {
-                      form.reset();
-                    }}
-                  >
-                    Cancel
-                  </Button>
+                  <CancelBtn onCancel={() => form.reset()} />
                 </DialogClose>
                 <Button type="submit">Add</Button>
               </DialogFooter>

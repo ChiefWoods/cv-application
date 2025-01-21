@@ -13,7 +13,6 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { Button } from "./ui/button";
-import { Pencil, Plus, Trash2 } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -25,15 +24,11 @@ import {
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { DurationFormField } from "./DurationFormField";
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "./ui/alert-dialog";
 import { setResume } from "@/lib/storage";
+import { CancelBtn } from "./CancelBtn";
+import { DeleteAlert } from "./DeleteAlert";
+import { AccordionEntry } from "./AccordionEntry";
+import { AddBtn } from "./AddBtn";
 
 function getEmptyForm(): Omit<Experience, "id"> {
   return {
@@ -116,68 +111,33 @@ export function ExperienceSection({
     <div className="flex flex-col gap-y-4 px-4">
       {experiences.map((exp) => {
         return (
-          <div
+          <AccordionEntry
             key={exp.id}
-            className="flex items-center justify-between gap-x-4"
-          >
-            <h3>{exp.company}</h3>
-            <div className="flex gap-x-2">
-              <Button variant="ghost" size="icon" onClick={() => openEdit(exp)}>
-                <Pencil />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => openDelete(exp)}
-              >
-                <Trash2 />
-              </Button>
-            </div>
-          </div>
+            name={exp.company}
+            openEdit={() => openEdit(exp)}
+            openDelete={() => openDelete(exp)}
+          />
         );
       })}
       {selectedExperience && (
-        <AlertDialog
+        <DeleteAlert
           open={isAlertDialogOpen}
           onOpenChange={setIsAlertDialogOpen}
-        >
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Delete Experience</AlertDialogTitle>
-              <AlertDialogDescription>
-                Delete &apos;{selectedExperience.company}&apos; from Experience?
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <Button
-                variant="secondary"
-                onClick={() => setIsAlertDialogOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="destructive"
-                onClick={() => onDelete(selectedExperience.id)}
-              >
-                Confirm
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+          type="experience"
+          subject={selectedExperience.company}
+          onCancel={() => setIsAlertDialogOpen(false)}
+          onConfirm={() => onDelete(selectedExperience.id)}
+        />
       )}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
-          <Button
-            variant="outline"
-            size="sm"
+          <AddBtn
+            type="experience"
             onClick={() => {
               setSelectedExperience(null);
               form.reset(getEmptyForm());
             }}
-          >
-            <Plus />
-            Add Experience
-          </Button>
+          />
         </DialogTrigger>
         <DialogContent>
           <Form {...form}>
@@ -232,14 +192,7 @@ export function ExperienceSection({
               />
               <DialogFooter className="mt-2">
                 <DialogClose asChild>
-                  <Button
-                    variant="secondary"
-                    onClick={() => {
-                      form.reset();
-                    }}
-                  >
-                    Cancel
-                  </Button>
+                  <CancelBtn onCancel={() => form.reset()} />
                 </DialogClose>
                 <Button type="submit">
                   {selectedExperience ? "Edit" : "Add"}

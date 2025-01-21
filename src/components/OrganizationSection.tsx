@@ -13,7 +13,6 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { Button } from "./ui/button";
-import { Pencil, Plus, Trash2 } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -25,15 +24,11 @@ import {
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { DurationFormField } from "./DurationFormField";
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "./ui/alert-dialog";
 import { setResume } from "@/lib/storage";
+import { CancelBtn } from "./CancelBtn";
+import { DeleteAlert } from "./DeleteAlert";
+import { AccordionEntry } from "./AccordionEntry";
+import { AddBtn } from "./AddBtn";
 
 function getEmptyForm(): Omit<Organization, "id"> {
   return {
@@ -117,69 +112,33 @@ export function OrganizationSection({
     <div className="flex flex-col gap-y-4 px-4">
       {organizations.map((org) => {
         return (
-          <div
+          <AccordionEntry
             key={org.id}
-            className="flex items-center justify-between gap-x-4"
-          >
-            <h3>{org.name}</h3>
-            <div className="flex gap-x-2">
-              <Button variant="ghost" size="icon" onClick={() => openEdit(org)}>
-                <Pencil />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => openDelete(org)}
-              >
-                <Trash2 />
-              </Button>
-            </div>
-          </div>
+            name={org.name}
+            openEdit={() => openEdit(org)}
+            openDelete={() => openDelete(org)}
+          />
         );
       })}
       {selectedOrganization && (
-        <AlertDialog
+        <DeleteAlert
           open={isAlertDialogOpen}
           onOpenChange={setIsAlertDialogOpen}
-        >
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Delete Organization</AlertDialogTitle>
-              <AlertDialogDescription>
-                Delete &apos;{selectedOrganization.name}&apos; from
-                Organization?
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <Button
-                variant="secondary"
-                onClick={() => setIsAlertDialogOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="destructive"
-                onClick={() => onDelete(selectedOrganization.id)}
-              >
-                Confirm
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+          type="organization"
+          subject={selectedOrganization.name}
+          onCancel={() => setIsAlertDialogOpen(false)}
+          onConfirm={() => onDelete(selectedOrganization.id)}
+        />
       )}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
-          <Button
-            variant="outline"
-            size="sm"
+          <AddBtn
+            type="organization"
             onClick={() => {
               setSelectedOrganization(null);
               form.reset(getEmptyForm());
             }}
-          >
-            <Plus />
-            Add Organization
-          </Button>
+          />
         </DialogTrigger>
         <DialogContent>
           <Form {...form}>
@@ -247,14 +206,7 @@ export function OrganizationSection({
               />
               <DialogFooter className="mt-2">
                 <DialogClose asChild>
-                  <Button
-                    variant="secondary"
-                    onClick={() => {
-                      form.reset();
-                    }}
-                  >
-                    Cancel
-                  </Button>
+                  <CancelBtn onCancel={() => form.reset()} />
                 </DialogClose>
                 <Button type="submit">
                   {selectedOrganization ? "Edit" : "Add"}

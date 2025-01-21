@@ -1,4 +1,3 @@
-import { Pencil } from "lucide-react";
 import { useState } from "react";
 import {
   Dialog,
@@ -25,6 +24,8 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Personal } from "@/types/resume";
 import { setResume } from "@/lib/storage";
+import { CancelBtn } from "./CancelBtn";
+import { EditBtn } from "./EditBtn";
 
 export function PersonalSection({
   personal,
@@ -60,9 +61,7 @@ export function PersonalSection({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon" onClick={openEdit}>
-          <Pencil />
-        </Button>
+        <EditBtn onEdit={openEdit} />
       </DialogTrigger>
       <DialogContent>
         <Form {...form}>
@@ -131,14 +130,7 @@ export function PersonalSection({
             </section>
             <DialogFooter className="mt-2">
               <DialogClose asChild>
-                <Button
-                  variant="secondary"
-                  onClick={() => {
-                    form.reset();
-                  }}
-                >
-                  Cancel
-                </Button>
+                <CancelBtn onCancel={() => form.reset()} />
               </DialogClose>
               <Button type="submit">Edit</Button>
             </DialogFooter>

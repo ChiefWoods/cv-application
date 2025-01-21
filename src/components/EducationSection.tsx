@@ -13,7 +13,6 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { Button } from "./ui/button";
-import { Pencil, Plus, Trash2 } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -25,15 +24,11 @@ import {
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { DurationFormField } from "./DurationFormField";
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "./ui/alert-dialog";
 import { setResume } from "@/lib/storage";
+import { CancelBtn } from "./CancelBtn";
+import { DeleteAlert } from "./DeleteAlert";
+import { AccordionEntry } from "./AccordionEntry";
+import { AddBtn } from "./AddBtn";
 
 function getEmptyForm(): Omit<Education, "id"> {
   return {
@@ -114,68 +109,33 @@ export function EducationSection({
     <div className="flex flex-col gap-y-4 px-4">
       {educations.map((edu) => {
         return (
-          <div
+          <AccordionEntry
             key={edu.id}
-            className="flex items-center justify-between gap-x-4"
-          >
-            <h3>{edu.school}</h3>
-            <div className="flex gap-x-2">
-              <Button variant="ghost" size="icon" onClick={() => openEdit(edu)}>
-                <Pencil />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => openDelete(edu)}
-              >
-                <Trash2 />
-              </Button>
-            </div>
-          </div>
+            name={edu.school}
+            openEdit={() => openEdit(edu)}
+            openDelete={() => openDelete(edu)}
+          />
         );
       })}
       {selectedEducation && (
-        <AlertDialog
+        <DeleteAlert
           open={isAlertDialogOpen}
           onOpenChange={setIsAlertDialogOpen}
-        >
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Delete Education</AlertDialogTitle>
-              <AlertDialogDescription>
-                Delete &apos;{selectedEducation.school}&apos; from Education?
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <Button
-                variant="secondary"
-                onClick={() => setIsAlertDialogOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="destructive"
-                onClick={() => onDelete(selectedEducation.id)}
-              >
-                Confirm
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+          type="education"
+          subject={selectedEducation.school}
+          onCancel={() => setIsAlertDialogOpen(false)}
+          onConfirm={() => onDelete(selectedEducation.id)}
+        />
       )}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
-          <Button
-            variant="outline"
-            size="sm"
+          <AddBtn
+            type="education"
             onClick={() => {
               setSelectedEducation(null);
               form.reset(getEmptyForm());
             }}
-          >
-            <Plus />
-            Add Education
-          </Button>
+          />
         </DialogTrigger>
         <DialogContent>
           <Form {...form}>
@@ -230,14 +190,7 @@ export function EducationSection({
               />
               <DialogFooter className="mt-2">
                 <DialogClose asChild>
-                  <Button
-                    variant="secondary"
-                    onClick={() => {
-                      form.reset();
-                    }}
-                  >
-                    Cancel
-                  </Button>
+                  <CancelBtn onCancel={() => form.reset()} />
                 </DialogClose>
                 <Button type="submit">
                   {selectedEducation ? "Edit" : "Add"}

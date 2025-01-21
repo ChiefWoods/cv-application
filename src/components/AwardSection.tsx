@@ -13,7 +13,6 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { Button } from "./ui/button";
-import { Pencil, Plus, Trash2 } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -24,16 +23,12 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "./ui/alert-dialog";
 import { DatePicker } from "./ui/date-picker";
 import { setResume } from "@/lib/storage";
+import { CancelBtn } from "./CancelBtn";
+import { DeleteAlert } from "./DeleteAlert";
+import { AccordionEntry } from "./AccordionEntry";
+import { AddBtn } from "./AddBtn";
 
 function getEmptyForm(): Omit<Award, "id"> {
   return {
@@ -111,72 +106,33 @@ export function AwardSection({
     <div className="flex flex-col gap-y-4 px-4">
       {awards.map((award) => {
         return (
-          <div
+          <AccordionEntry
             key={award.id}
-            className="flex items-center justify-between gap-x-4"
-          >
-            <h3>{award.name}</h3>
-            <div className="flex gap-x-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => openEdit(award)}
-              >
-                <Pencil />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => openDelete(award)}
-              >
-                <Trash2 />
-              </Button>
-            </div>
-          </div>
+            name={award.name}
+            openEdit={() => openEdit(award)}
+            openDelete={() => openDelete(award)}
+          />
         );
       })}
       {selectedAward && (
-        <AlertDialog
+        <DeleteAlert
           open={isAlertDialogOpen}
           onOpenChange={setIsAlertDialogOpen}
-        >
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Delete Award</AlertDialogTitle>
-              <AlertDialogDescription>
-                Delete &apos;{selectedAward.name}&apos; from Award?
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <Button
-                variant="outline"
-                onClick={() => setIsAlertDialogOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="destructive"
-                onClick={() => onDelete(selectedAward.id)}
-              >
-                Confirm
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+          type="award"
+          subject={selectedAward.name}
+          onCancel={() => setIsAlertDialogOpen(false)}
+          onConfirm={() => onDelete(selectedAward.id)}
+        />
       )}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
-          <Button
-            variant="outline"
-            size="sm"
+          <AddBtn
+            type="award"
             onClick={() => {
               setSelectedAward(null);
               form.reset(getEmptyForm());
             }}
-          >
-            <Plus />
-            Add Award
-          </Button>
+          />
         </DialogTrigger>
         <DialogContent>
           <Form {...form}>
@@ -243,14 +199,7 @@ export function AwardSection({
               />
               <DialogFooter className="mt-2">
                 <DialogClose asChild>
-                  <Button
-                    variant="secondary"
-                    onClick={() => {
-                      form.reset();
-                    }}
-                  >
-                    Cancel
-                  </Button>
+                  <CancelBtn onCancel={() => form.reset()} />
                 </DialogClose>
                 <Button type="submit">{selectedAward ? "Edit" : "Add"}</Button>
               </DialogFooter>
