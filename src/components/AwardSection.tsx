@@ -4,17 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "./ui/dialog";
-import { Button } from "./ui/button";
-import {
-  Form,
   FormControl,
   FormField,
   FormItem,
@@ -25,10 +14,11 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { DatePicker } from "./ui/date-picker";
 import { setResume } from "@/lib/storage";
-import { CancelBtn } from "./CancelBtn";
-import { DeleteAlert } from "./DeleteAlert";
+import { DynamicAlert } from "./DynamicAlert";
 import { AccordionEntry } from "./AccordionEntry";
 import { AddBtn } from "./AddBtn";
+import { CategorySection } from "./CategorySection";
+import { DynamicForm } from "./DynamicForm";
 
 function getEmptyForm(): Omit<Award, "id"> {
   return {
@@ -103,7 +93,7 @@ export function AwardSection({
   }
 
   return (
-    <div className="flex flex-col gap-y-4 px-4">
+    <CategorySection>
       {awards.map((award) => {
         return (
           <AccordionEntry
@@ -115,17 +105,74 @@ export function AwardSection({
         );
       })}
       {selectedAward && (
-        <DeleteAlert
+        <DynamicAlert
           open={isAlertDialogOpen}
           onOpenChange={setIsAlertDialogOpen}
-          type="award"
+          category="award"
           subject={selectedAward.name}
           onCancel={() => setIsAlertDialogOpen(false)}
           onConfirm={() => onDelete(selectedAward.id)}
         />
       )}
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogTrigger asChild>
+      <DynamicForm<Award>
+        form={form}
+        formFields={
+          <>
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="organization"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>Organization</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="date"
+              render={({ field }) => (
+                <FormItem className="flex flex-1 flex-col gap-y-2">
+                  <FormLabel className="mt-1">Date</FormLabel>
+                  <FormControl>
+                    <DatePicker date={field.value} setDate={field.onChange} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea {...field} className="resize-none" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </>
+        }
+        triggerChildren={
           <AddBtn
             category="award"
             onClick={() => {
@@ -133,80 +180,13 @@ export function AwardSection({
               form.reset(getEmptyForm());
             }}
           />
-        </DialogTrigger>
-        <DialogContent>
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col gap-y-2"
-            >
-              <DialogHeader>
-                <DialogTitle>
-                  {selectedAward ? "Edit" : "Add"} Award
-                </DialogTitle>
-              </DialogHeader>
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="organization"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Organization</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="date"
-                render={({ field }) => (
-                  <FormItem className="flex flex-1 flex-col gap-y-2">
-                    <FormLabel className="mt-1">Date</FormLabel>
-                    <FormControl>
-                      <DatePicker date={field.value} setDate={field.onChange} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Textarea {...field} className="resize-none" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <DialogFooter className="mt-2 gap-2">
-                <DialogClose asChild>
-                  <CancelBtn onCancel={() => form.reset()} />
-                </DialogClose>
-                <Button type="submit">{selectedAward ? "Edit" : "Add"}</Button>
-              </DialogFooter>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
-    </div>
+        }
+        title={`${selectedAward ? "Edit" : "Add"} Award`}
+        isOpen={isDialogOpen}
+        submitBtnText={selectedAward ? "Save" : "Add"}
+        setIsOpen={setIsDialogOpen}
+        onSubmit={onSubmit}
+      />
+    </CategorySection>
   );
 }

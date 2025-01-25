@@ -4,17 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "./ui/dialog";
-import { Button } from "./ui/button";
-import {
-  Form,
   FormControl,
   FormField,
   FormItem,
@@ -25,10 +14,11 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { DurationFormField } from "./DurationFormField";
 import { setResume } from "@/lib/storage";
-import { CancelBtn } from "./CancelBtn";
-import { DeleteAlert } from "./DeleteAlert";
+import { DynamicAlert } from "./DynamicAlert";
 import { AccordionEntry } from "./AccordionEntry";
 import { AddBtn } from "./AddBtn";
+import { CategorySection } from "./CategorySection";
+import { DynamicForm } from "./DynamicForm";
 
 function getEmptyForm(): Omit<Experience, "id"> {
   return {
@@ -108,7 +98,7 @@ export function ExperienceSection({
   }
 
   return (
-    <div className="flex flex-col gap-y-4 px-4">
+    <CategorySection>
       {experiences.map((exp) => {
         return (
           <AccordionEntry
@@ -120,17 +110,62 @@ export function ExperienceSection({
         );
       })}
       {selectedExperience && (
-        <DeleteAlert
+        <DynamicAlert
           open={isAlertDialogOpen}
           onOpenChange={setIsAlertDialogOpen}
-          type="experience"
+          category="experience"
           subject={selectedExperience.company}
           onCancel={() => setIsAlertDialogOpen(false)}
           onConfirm={() => onDelete(selectedExperience.id)}
         />
       )}
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogTrigger asChild>
+      <DynamicForm<Experience>
+        form={form}
+        formFields={
+          <>
+            <FormField
+              control={form.control}
+              name="company"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Company</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Title</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <DurationFormField<Experience> form={form} />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea {...field} className="resize-none" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </>
+        }
+        triggerChildren={
           <AddBtn
             category="experience"
             onClick={() => {
@@ -138,70 +173,13 @@ export function ExperienceSection({
               form.reset(getEmptyForm());
             }}
           />
-        </DialogTrigger>
-        <DialogContent>
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col gap-y-2"
-            >
-              <DialogHeader>
-                <DialogTitle>
-                  {selectedExperience ? "Edit" : "Add"} Experience
-                </DialogTitle>
-              </DialogHeader>
-              <FormField
-                control={form.control}
-                name="company"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Company</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Title</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <DurationFormField<Experience> form={form} />
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Textarea {...field} className="resize-none" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <DialogFooter className="mt-2 gap-2">
-                <DialogClose asChild>
-                  <CancelBtn onCancel={() => form.reset()} />
-                </DialogClose>
-                <Button type="submit">
-                  {selectedExperience ? "Edit" : "Add"}
-                </Button>
-              </DialogFooter>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
-    </div>
+        }
+        title={`${selectedExperience ? "Edit" : "Add"} Experience`}
+        isOpen={isDialogOpen}
+        submitBtnText={selectedExperience ? "Save" : "Add"}
+        setIsOpen={setIsDialogOpen}
+        onSubmit={onSubmit}
+      />
+    </CategorySection>
   );
 }

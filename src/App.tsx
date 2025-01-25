@@ -39,7 +39,7 @@ export default function App() {
   );
   const [awards, setAwards] = useState<Award[]>(resume.awards);
   const [skills, setSkills] = useState<Skill[]>(resume.skills);
-  const isDesktop = useMediaQuery("(min-width: 640px)");
+  const isDesktop = useMediaQuery();
 
   const headerInfo = [
     {

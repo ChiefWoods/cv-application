@@ -4,17 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "./ui/dialog";
-import { Button } from "./ui/button";
-import {
-  Form,
   FormControl,
   FormField,
   FormItem,
@@ -25,10 +14,11 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { DurationFormField } from "./DurationFormField";
 import { setResume } from "@/lib/storage";
-import { CancelBtn } from "./CancelBtn";
-import { DeleteAlert } from "./DeleteAlert";
+import { DynamicAlert } from "./DynamicAlert";
 import { AccordionEntry } from "./AccordionEntry";
 import { AddBtn } from "./AddBtn";
+import { DynamicForm } from "./DynamicForm";
+import { CategorySection } from "./CategorySection";
 
 function getEmptyForm(): Omit<Education, "id"> {
   return {
@@ -106,7 +96,7 @@ export function EducationSection({
   }
 
   return (
-    <div className="flex flex-col gap-y-4 px-4">
+    <CategorySection>
       {educations.map((edu) => {
         return (
           <AccordionEntry
@@ -118,17 +108,62 @@ export function EducationSection({
         );
       })}
       {selectedEducation && (
-        <DeleteAlert
+        <DynamicAlert
           open={isAlertDialogOpen}
           onOpenChange={setIsAlertDialogOpen}
-          type="education"
+          category="education"
           subject={selectedEducation.school}
           onCancel={() => setIsAlertDialogOpen(false)}
           onConfirm={() => onDelete(selectedEducation.id)}
         />
       )}
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogTrigger asChild>
+      <DynamicForm<Education>
+        form={form}
+        formFields={
+          <>
+            <FormField
+              control={form.control}
+              name="school"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>School</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Title</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <DurationFormField<Education> form={form} />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea {...field} className="resize-none" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </>
+        }
+        triggerChildren={
           <AddBtn
             category="education"
             onClick={() => {
@@ -136,70 +171,13 @@ export function EducationSection({
               form.reset(getEmptyForm());
             }}
           />
-        </DialogTrigger>
-        <DialogContent>
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col gap-y-2"
-            >
-              <DialogHeader>
-                <DialogTitle>
-                  {selectedEducation ? "Edit" : "Add"} Education
-                </DialogTitle>
-              </DialogHeader>
-              <FormField
-                control={form.control}
-                name="school"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>School</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Title</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <DurationFormField<Education> form={form} />
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Textarea {...field} className="resize-none" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <DialogFooter className="mt-2 gap-2">
-                <DialogClose asChild>
-                  <CancelBtn onCancel={() => form.reset()} />
-                </DialogClose>
-                <Button type="submit">
-                  {selectedEducation ? "Edit" : "Add"}
-                </Button>
-              </DialogFooter>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
-    </div>
+        }
+        title={`${selectedEducation ? "Edit" : "Add"} Education`}
+        isOpen={isDialogOpen}
+        submitBtnText={selectedEducation ? "Save" : "Add"}
+        setIsOpen={setIsDialogOpen}
+        onSubmit={onSubmit}
+      />
+    </CategorySection>
   );
 }

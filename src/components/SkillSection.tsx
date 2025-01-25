@@ -3,18 +3,7 @@ import { Skill } from "@/types/resume";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Button } from "./ui/button";
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "./ui/dialog";
-import {
-  Form,
   FormControl,
   FormField,
   FormItem,
@@ -23,10 +12,11 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 import { setResume } from "@/lib/storage";
-import { CancelBtn } from "./CancelBtn";
 import { AccordionEntry } from "./AccordionEntry";
-import { DeleteAlert } from "./DeleteAlert";
+import { DynamicAlert } from "./DynamicAlert";
 import { AddBtn } from "./AddBtn";
+import { DynamicForm } from "./DynamicForm";
+import { CategorySection } from "./CategorySection";
 
 function getEmptyForm(): Omit<Skill, "id"> {
   return {
@@ -78,7 +68,7 @@ export function SkillSection({
   }
 
   return (
-    <div className="flex flex-col gap-y-4 px-4">
+    <CategorySection>
       {skills.map((skill) => {
         return (
           <AccordionEntry
@@ -89,17 +79,33 @@ export function SkillSection({
         );
       })}
       {selectedSkill && (
-        <DeleteAlert
+        <DynamicAlert
           open={isAlertDialogOpen}
           onOpenChange={setIsAlertDialogOpen}
-          type="skill"
+          category="skill"
           subject={selectedSkill.name}
           onCancel={() => setIsAlertDialogOpen(false)}
           onConfirm={() => onDelete(selectedSkill.id)}
         />
       )}
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogTrigger asChild>
+      <DynamicForm<Skill>
+        form={form}
+        formFields={
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        }
+        triggerChildren={
           <AddBtn
             category="skill"
             onClick={() => {
@@ -107,39 +113,13 @@ export function SkillSection({
               form.reset(getEmptyForm());
             }}
           />
-        </DialogTrigger>
-        <DialogContent>
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col gap-y-2"
-            >
-              <DialogHeader>
-                <DialogTitle>Add Skill</DialogTitle>
-              </DialogHeader>
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <DialogFooter className="mt-2 gap-2">
-                <DialogClose asChild>
-                  <CancelBtn onCancel={() => form.reset()} />
-                </DialogClose>
-                <Button type="submit">Add</Button>
-              </DialogFooter>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
-    </div>
+        }
+        title={`${selectedSkill ? "Edit" : "Add"} Skill`}
+        isOpen={isDialogOpen}
+        submitBtnText={selectedSkill ? "Save" : "Add"}
+        setIsOpen={setIsDialogOpen}
+        onSubmit={onSubmit}
+      />
+    </CategorySection>
   );
 }
