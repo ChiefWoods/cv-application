@@ -13,7 +13,7 @@ export function Entry({
 }) {
   return (
     <div className="flex flex-col gap-y-2">
-      <div className="flex flex-wrap justify-between gap-1">
+      <div className="flex flex-col flex-wrap justify-between gap-1 sm:flex-row">
         <div className="flex flex-col gap-y-1">
           <h4 className="font-semibold">{header}</h4>
           <p>{subtitle}</p>
