@@ -133,7 +133,7 @@ export function OrganizationSection({
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
           <AddBtn
-            type="organization"
+            category="organization"
             onClick={() => {
               setSelectedOrganization(null);
               form.reset(getEmptyForm());

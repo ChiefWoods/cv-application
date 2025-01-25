@@ -127,7 +127,7 @@ export function AwardSection({
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
           <AddBtn
-            type="award"
+            category="award"
             onClick={() => {
               setSelectedAward(null);
               form.reset(getEmptyForm());

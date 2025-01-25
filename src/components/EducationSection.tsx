@@ -130,7 +130,7 @@ export function EducationSection({
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
           <AddBtn
-            type="education"
+            category="education"
             onClick={() => {
               setSelectedEducation(null);
               form.reset(getEmptyForm());

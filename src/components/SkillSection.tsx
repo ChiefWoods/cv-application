@@ -101,7 +101,7 @@ export function SkillSection({
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
           <AddBtn
-            type="skill"
+            category="skill"
             onClick={() => {
               setSelectedSkill(null);
               form.reset(getEmptyForm());

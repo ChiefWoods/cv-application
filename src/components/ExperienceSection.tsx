@@ -132,7 +132,7 @@ export function ExperienceSection({
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
           <AddBtn
-            type="experience"
+            category="experience"
             onClick={() => {
               setSelectedExperience(null);
               form.reset(getEmptyForm());

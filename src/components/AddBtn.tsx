@@ -1,18 +1,28 @@
 import { Plus } from "lucide-react";
 import { Button } from "./ui/button";
 import { capitalizeFirstLetter } from "@/lib/utils";
+import { forwardRef, ButtonHTMLAttributes } from "react";
 
-export function AddBtn({
-  type,
-  onClick,
-}: {
-  type: string;
+interface AddBtnProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  category: string;
   onClick: () => void;
-}) {
-  return (
-    <Button variant="outline" size="sm" onClick={onClick}>
-      <Plus />
-      Add {capitalizeFirstLetter(type)}
-    </Button>
-  );
 }
+
+export const AddBtn = forwardRef<HTMLButtonElement, AddBtnProps>(
+  ({ category, onClick, ...props }, ref) => {
+    return (
+      <Button
+        ref={ref}
+        variant="outline"
+        size="sm"
+        onClick={onClick}
+        {...props}
+      >
+        <Plus />
+        Add {capitalizeFirstLetter(category)}
+      </Button>
+    );
+  },
+);
+
+AddBtn.displayName = "AddBtn";
