@@ -58,7 +58,7 @@ export default function App() {
 
   return (
     <>
-      <main className="flex flex-col gap-x-4 p-4 md:flex-row">
+      <main className="flex flex-col gap-4 p-4 md:flex-row">
         <section id="editor" className="h-fit flex-1 rounded-lg border">
           <Accordion type="single" collapsible>
             <div className="flex items-center justify-between gap-x-3 border-b p-4">
@@ -130,7 +130,7 @@ export default function App() {
                 <>
                   <div className="flex flex-col items-center gap-y-2 py-4">
                     <h2 className="text-2xl font-semibold">{personal.name}</h2>
-                    <div className="flex gap-4">
+                    <div className="flex flex-wrap justify-center gap-4">
                       {headerInfo.map(({ icon, text }) => {
                         return (
                           text && (

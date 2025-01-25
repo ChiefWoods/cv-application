@@ -80,7 +80,7 @@
 
 @layer utilities {
   .accordion-title {
-    @apply text-base;
+    @apply text-base font-normal;
   }
 
   .header-info-icon {

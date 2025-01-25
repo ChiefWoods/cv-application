@@ -36,7 +36,7 @@ export function DeleteAlert({
             Delete &apos;{subject}&apos; from {capitalizedType}?
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
+        <AlertDialogFooter className="gap-2">
           <CancelBtn onCancel={onCancel} />
           <ConfirmBtn onConfirm={onConfirm} />
         </AlertDialogFooter>

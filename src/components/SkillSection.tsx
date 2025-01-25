@@ -130,7 +130,7 @@ export function SkillSection({
                   </FormItem>
                 )}
               />
-              <DialogFooter className="mt-2">
+              <DialogFooter className="mt-2 gap-2">
                 <DialogClose asChild>
                   <CancelBtn onCancel={() => form.reset()} />
                 </DialogClose>
