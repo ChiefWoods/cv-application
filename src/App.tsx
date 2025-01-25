@@ -58,7 +58,7 @@ export default function App() {
 
   return (
     <>
-      <main className="flex flex-col gap-4 p-4 sm:flex-row">
+      <main className="relative flex flex-col gap-4 p-4 sm:flex-row">
         {!isDesktop && (
           <Sheet>
             <SheetTrigger asChild>
@@ -79,7 +79,10 @@ export default function App() {
             </SheetContent>
           </Sheet>
         )}
-        <section id="editor" className="h-fit flex-1 rounded-lg border">
+        <section
+          id="editor"
+          className="sticky left-4 top-4 h-fit flex-1 rounded-lg border"
+        >
           <Accordion type="single" collapsible>
             <div className="flex items-center justify-between gap-x-3 border-b p-4">
               <p className="accordion-title">Personal</p>
