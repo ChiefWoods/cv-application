@@ -62,7 +62,11 @@ export default function App() {
         {!isDesktop && (
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="outline" size="icon" className="ml-auto">
+              <Button
+                variant="outline"
+                size="icon"
+                className="ml-auto text-blue-500"
+              >
                 <FileUser />
               </Button>
             </SheetTrigger>
@@ -76,6 +80,7 @@ export default function App() {
                 skills={skills}
                 headerInfo={headerInfo}
               />
+              {/* <DownloadBtn filename={getResumeFilename(personal.name)} /> */}
             </SheetContent>
           </Sheet>
         )}

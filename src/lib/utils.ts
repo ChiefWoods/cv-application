@@ -15,3 +15,7 @@ export function formatMonthYear(date: Date): string {
     year: "numeric",
   }).format(date);
 }
+
+export function getResumeFilename(name: string): string {
+  return `resume_${name.replace(/\s+/g, "_").toLowerCase()}`;
+}
