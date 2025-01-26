@@ -1,4 +1,20 @@
 import { ReactNode } from "react";
+import { Text, View, StyleSheet } from "@react-pdf/renderer";
+
+const styles = StyleSheet.create({
+  general: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  title: {
+    fontSize: 12,
+    width: 150,
+  },
+  entry: {
+    width: "100%",
+    gap: 8,
+  },
+});
 
 export function GeneralDiv({
   title,
@@ -8,9 +24,9 @@ export function GeneralDiv({
   children: ReactNode;
 }) {
   return (
-    <div className="grid grid-cols-[minmax(150px,auto)_1fr] py-4">
-      <h3>{title}</h3>
-      <div className="flex flex-1 flex-col gap-y-3">{children}</div>
-    </div>
+    <View style={styles.general}>
+      <Text style={styles.title}>{title}</Text>
+      <View style={styles.entry}>{children}</View>
+    </View>
   );
 }

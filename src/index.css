@@ -83,7 +83,7 @@
     @apply text-base font-normal;
   }
 
-  .header-info-icon {
-    @apply size-4 text-blue-500;
+  .preview-text {
+    @apply my-auto flex-1 p-4 text-center;
   }
 }

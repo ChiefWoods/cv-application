@@ -26,7 +26,7 @@ Resume builder for [The Odin Project](https://www.theodinproject.com/).
 ### Libraries
 
 - [shadcn/ui](https://ui.shadcn.com/)
-- [react-to-pdf](https://github.com/ivmarcos/react-to-pdf)
+- [@react-pdf/renderer](https://react-pdf.org/)
 
 ## Getting Started
 
